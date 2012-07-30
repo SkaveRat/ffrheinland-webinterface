@@ -1,0 +1,29 @@
+#!/bin/sh -e
+. /etc/splash.sh
+. /www/service/cgi-bin/common.sh
+
+# decode request params
+URL="http://$(sed 's/target_url=//g' | urldecode || true)"
+USER_MAC=$(grep ^$REMOTE_HOST </proc/net/arp | awk 'BEGIN { FS = " " } ; { print $4 }')
+[ -n "$USER_MAC" ]
+
+# check if user is already splashed; splash otherwise; refresh the
+# p2ptbl entry in any case (renews the timer)
+if [ -z "$(p2ptbl get $tbl "$USER_MAC")" ]; then
+    if have_splash_iptable; then
+	add_splash_iptable "$USER_MAC"
+    fi
+fi
+add_splash_p2ptbl "$USER_MAC"
+
+# send response (encode / to not confuse sed)
+
+echo -en "Status: 200 OK\r
+Content-Type: text/html\r
+\r
+"
+if have_internet; then
+    sed "s/targeturl/$(echo "$URL" | sed 's#/#\\/#g')/g" iframe.html
+else
+    cat internet.html
+fi
