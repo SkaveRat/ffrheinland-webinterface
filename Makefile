@@ -19,5 +19,5 @@ img:
 	cp -r $(SRC)service/img/ $(WEBINTERFACE_DIR)service/
 html:
 	cp -r $(SRC)service/cgi-bin $(WEBINTERFACE_DIR)service/
-	htmlcompressor --remove-intertag-spaces --compress-js --compress-css --js-compressor yui -o $(WEBINTERFACE_DIR)  $(SRC)service/
-	htmlcompressor --remove-intertag-spaces --compress-js --compress-css --js-compressor yui -o $(WEBINTERFACE_DIR)  $(SRC)redirection/
+	htmlcompressor --remove-intertag-spaces --compress-js --compress-css --js-compressor yui -o $(WEBINTERFACE_DIR)service/  $(SRC)service/
+	htmlcompressor --remove-intertag-spaces --compress-js --compress-css --js-compressor yui -o $(WEBINTERFACE_DIR)redirection/  $(SRC)redirection/
